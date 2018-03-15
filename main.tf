@@ -4,8 +4,8 @@ provider "aws" {
   region     = "${var.AWS_Default_Region}"
 }
 
-resource "aws_security_group" "vpc-e24cf099-standard-security" {
-  name        = "vpc-e24cf099-standard-security"
+resource "aws_security_group" "secgroup-standard-security" {
+  name        = "secgroup-standard-security"
   description = "Allow standard inbout and all outbound"
   vpc_id      = "${var.AWS_VPC_ID}"
 
@@ -43,20 +43,14 @@ resource "aws_security_group" "vpc-e24cf099-standard-security" {
   }
 }
 
-resource "aws_subnet" "production-network" {
-  vpc_id            = "${var.AWS_VPC_ID}"
-  cidr_block        = "10.0.1.0/24"
-  availability_zone = "us-east-1a"
+resource "aws_network_interface" "docker-manager1" {
+  subnet_id = "subnet-cfdea692"
+  private_ips = ["172.31.32.25"]
+  security_groups = ["${aws_security_group.secgroup-standard-security.id}"]
 }
 
-resource "aws_subnet" "staging-network" {
-  vpc_id            = "${var.AWS_VPC_ID}"
-  cidr_block        = "10.0.2.0/24"
-  availability_zone = "us-east-1b"
-}
-
-resource "aws_network_interface" "docker-ubuntu" {
-  subnet_id = "${aws_subnet.production-network.id}"
-  private_ips = ["10.0.1.25"]
-  security_groups = ["${aws_security_group.vpc-e24cf099-standard-security.id}"]
+resource "aws_network_interface" "docker-manager2" {
+  subnet_id = "subnet-cfdea692"
+  private_ips = ["172.31.32.26"]
+  security_groups = ["${aws_security_group.secgroup-standard-security.id}"]
 }
