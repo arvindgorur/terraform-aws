@@ -12,3 +12,7 @@ variable "AWS_Default_AMI" {
 variable "AWS_Default_Instance_Type" {
   default = "t2.micro"
 }
+
+variable "AWS_Default_Security_Group" {
+  default = "sg-9e51dbe9"
+}
